@@ -24,6 +24,8 @@ class ScrollableListTabScroller extends StatefulWidget {
   final void Function(int tabIndex)? tabChanged;
   final double earlyChangePositionOffset;
   final Duration animationDuration;
+  final double? heightOfTabBar;
+  final EdgeInsetsGeometry? tabBarPadding;
 
   ScrollableListTabScroller({
     required this.itemCount,
@@ -53,6 +55,8 @@ class ScrollableListTabScroller extends StatefulWidget {
     this.scrollOffsetController,
     this.scrollOffsetListener,
     this.tabAlignment = TabAlignment.start,
+    this.heightOfTabBar,
+    this.tabBarPadding,
   });
 
   final ScrollOffsetController? scrollOffsetController;
@@ -228,11 +232,14 @@ class ScrollableListTabScrollerState extends State<ScrollableListTabScroller> {
 
   Widget buildCustomHeaderContainerOrDefault(
       {required BuildContext context, required Widget child}) {
-    return widget.headerContainerBuilder?.call(context, child) ??
-        SizedBox(
-          height: 30,
-          child: child,
-        );
+      return Padding(
+      padding: widget.tabBarPadding ?? EdgeInsets.zero,
+      child: widget.headerContainerBuilder?.call(context, child) ??
+          SizedBox(
+            height: widget.heightOfTabBar,
+            child: child,
+          ),
+    );
   }
 
   Widget buildCustomBodyContainerOrDefault(
